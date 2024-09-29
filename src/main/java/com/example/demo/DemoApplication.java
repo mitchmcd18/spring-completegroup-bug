@@ -22,15 +22,16 @@ public class DemoApplication {
 	@Bean
 	IntegrationFlow testFlow() {
 		MessageGroupStore messageStore = new SimpleMessageStore();
+		// Add two messages that 'complete' the aggregation immediately on startup
 		messageStore.addMessagesToGroup("test", MessageBuilder.withPayload("1").build());
 		messageStore.addMessagesToGroup("test", MessageBuilder.withPayload("2").build());
 
 		return f -> f.aggregate((a) -> a
 						.messageStore(messageStore)
-						.expireTimeout(10)
+						.expireTimeout(1) // Expire immediately
 						.expireGroupsUponTimeout(true)
 						.expireGroupsUponCompletion(true)
-						.releaseStrategy(new MessageCountReleaseStrategy(2)))
+						.releaseStrategy(new MessageCountReleaseStrategy(2))) // The group above is actually 'complete' on startup
 				.handle(
 						Message.class, (m, h)  -> m).channel(new DirectChannel());
 	}
