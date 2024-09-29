@@ -29,8 +29,6 @@ public class DemoApplication {
 		return f -> f.aggregate((a) -> a
 						.messageStore(messageStore)
 						.expireTimeout(1) // Expire immediately
-						.expireGroupsUponTimeout(true)
-						.expireGroupsUponCompletion(true)
 						.releaseStrategy(new MessageCountReleaseStrategy(2))) // The group above is actually 'complete' on startup
 				.handle(
 						Message.class, (m, h)  -> m).channel(new DirectChannel());
