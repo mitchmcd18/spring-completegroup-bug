@@ -30,8 +30,7 @@ public class DemoApplication {
 						.messageStore(messageStore)
 						.expireTimeout(1) // Expire immediately
 						.releaseStrategy(new MessageCountReleaseStrategy(2))) // The group above is actually 'complete' on startup
-				.handle(
-						Message.class, (m, h)  -> m).channel(new DirectChannel());
+				.handle(System.out::println);
 	}
 
 }
